@@ -1,0 +1,219 @@
+# Implementation Plan
+
+- [x] 1. Set up monorepo structure and project scaffolding
+  - [x] 1.1 Create /frontend folder with Next.js 14 App Router project
+    - Initialize with `npx create-next-app@14` using TypeScript, Tailwind CSS, App Router
+    - Install dependencies: framer-motion, lucide-react
+    - Configure Tailwind with Corporate Clean color scheme (#0066CC, #FFFFFF)
+    - _Requirements: 11.1, 11.3, 11.4, 8.2, 8.3_
+  - [x] 1.2 Create /backend folder with FastAPI project
+    - Initialize Python project with pyproject.toml or requirements.txt
+    - Install dependencies: fastapi, uvicorn, httpx, pydantic
+    - Create main.py with basic FastAPI app and CORS configuration
+    - _Requirements: 11.2, 11.5_
+  - [x] 1.3 Create environment configuration files
+    - Create /frontend/.env.example with NEXT_PUBLIC_API_URL
+    - Create /backend/.env.example with CEREBRAS_API_KEY, ELEVENLABS_API_KEY, ELEVENLABS_VOICE_ID, RAINDROP_API_KEY
+    - _Requirements: 3.1, 3.2_
+
+- [x] 2. Implement backend data models and core services
+  - [x] 2.1 Create Pydantic models for API contracts
+    - Implement ChatRequest, ChatResponse, CerebrasResponse models
+    - Add validation for sentiment enum and patience score range
+    - _Requirements: 10.4, 10.5, 3.5_
+  - [x] 2.2 Write property test for Cerebras response validation
+    - **Property 10: Cerebras Response Validation**
+    - Test that validation passes only for valid JSON with required fields and correct types
+    - **Validates: Requirements 10.2, 10.4, 10.5**
+  - [x] 2.3 Implement PatienceCalculator service
+    - Create function to calculate new patience score based on sentiment
+    - Apply +15 for positive, -20 for negative, 0 for neutral
+    - Clamp result to 0-100 range
+    - _Requirements: 4.5_
+  - [x] 2.4 Write property test for patience calculation
+    - **Property 5: Patience Score Calculation**
+    - Test that for any starting score and sentiment, the formula is correctly applied and clamped
+    - **Validates: Requirements 4.5**
+
+- [x] 3. Implement external API clients
+  - [x] 3.1 Implement CerebrasClient
+    - Create async client for Cerebras API
+    - Include system prompt for "The Skeptic CTO" persona
+    - Parse JSON response and validate structure
+    - Implement retry logic (up to 2 retries) for invalid JSON
+    - _Requirements: 3.1, 10.1, 10.2, 10.3_
+  - [x] 3.2 Implement ElevenLabsClient
+    - Create async client for ElevenLabs TTS API
+    - Request MP3 format with 128kbps bitrate
+    - Return raw audio bytes
+    - _Requirements: 3.2, 3.3_
+  - [x] 3.3 Write property test for base64 audio encoding
+    - **Property 3: Base64 Audio Round-Trip**
+    - Test that any binary data survives base64 encode/decode round-trip
+    - **Validates: Requirements 3.4**
+  - [x] 3.4 Implement SmartMemoryClient
+    - Create client for LiquidMetal Raindrop SmartMemory
+    - Implement get_history(session_id) and add_message(session_id, role, content) methods
+    - _Requirements: 9.3, 9.4, 9.5_
+
+- [x] 4. Implement backend orchestration and API endpoint
+  - [x] 4.1 Implement OrchestratorService
+    - Coordinate: get history → call Cerebras → call ElevenLabs → encode audio → calculate patience
+    - Return consolidated ChatResponse
+    - _Requirements: 3.1, 3.2, 3.4, 3.5, 9.6_
+  - [x] 4.2 Implement /chat POST endpoint
+    - Accept ChatRequest with session_id, user_text, current_patience
+    - Call OrchestratorService
+    - Handle errors and return appropriate responses
+    - _Requirements: 3.5, 9.2, 9.3_
+  - [x] 4.3 Write property test for response structure
+    - **Property 4: Response Structure Completeness**
+    - Test that all responses contain required fields with correct types
+    - **Validates: Requirements 3.5**
+
+- [x] 5. Checkpoint - Backend tests passing
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 6. Implement frontend core components
+  - [x] 6.1 Create LobbyScreen component
+    - Display centered "Objection Dojo" title
+    - Display "Start Simulation" button
+    - Navigate to /simulation on click
+    - _Requirements: 1.1, 1.2_
+  - [x] 6.2 Create PatienceMeter component
+    - Display 0-100% progress bar with numeric value
+    - Animate with green highlight on increase, red on decrease
+    - Use Framer Motion for 300ms transitions
+    - _Requirements: 4.1, 4.2, 4.3, 4.4, 8.4_
+  - [x] 6.3 Create Toast component
+    - Display notification messages
+    - Auto-dismiss after 3 seconds
+    - Support error styling for network errors
+    - _Requirements: 2.5, 7.1, 7.3_
+
+- [x] 7. Implement speech recognition and audio playback hooks
+  - [x] 7.1 Create useSpeechRecognition hook
+    - Wrap Web Speech API
+    - Expose start(), stop(), transcript, isListening
+    - Handle browser compatibility check
+    - _Requirements: 2.7, 2.8_
+  - [x] 7.2 Create useAudioPlayer hook
+    - Accept base64 audio string
+    - Create Audio element with data URI
+    - Expose play(), isPlaying, onEnded callback
+    - _Requirements: 3.6, 6.2_
+
+- [x] 8. Implement ActionButton with state machine
+  - [x] 8.1 Create ActionButton component
+    - Implement Idle state (Mic icon, blue)
+    - Implement Recording state (Stop icon, pulsing animation)
+    - Implement Disabled state (greyed out, non-interactive)
+    - _Requirements: 2.1, 2.2, 2.3, 6.1_
+  - [x] 8.2 Write property test for whitespace input rejection
+    - **Property 1: Whitespace Input Rejection**
+    - Test that empty/whitespace strings are rejected without API call
+    - **Validates: Requirements 2.4**
+  - [x] 8.3 Write property test for valid text triggers API
+    - **Property 2: Valid Text Triggers API Call**
+    - Test that non-whitespace strings trigger API call
+    - **Validates: Requirements 2.6**
+  - [x] 8.4 Write property test for audio mutex
+    - **Property 6: Audio Mutex - Button Disabled During Playback**
+    - Test that button is disabled whenever audio is playing
+    - **Validates: Requirements 6.1**
+  - [x] 8.5 Write property test for disabled button ignores input
+    - **Property 7: Disabled Button Ignores Input**
+    - Test that taps while disabled produce no state change
+    - **Validates: Requirements 6.3**
+
+- [x] 9. Implement SimulationScreen with game logic
+  - [x] 9.1 Create SimulationScreen component
+    - Generate session_id on mount using crypto.randomUUID()
+    - Initialize patience at 50%
+    - Request microphone permission
+    - Compose ActionButton, PatienceMeter, conversation display
+    - _Requirements: 1.3, 1.4, 9.1_
+  - [x] 9.2 Write property test for session ID uniqueness
+    - **Property 9: Session ID Uniqueness**
+    - Test that multiple UUID generations produce unique values
+    - **Validates: Requirements 9.1**
+  - [x] 9.3 Implement chat flow logic
+    - On stop recording: validate transcript, call /chat API
+    - On response: update patience, play audio, check win/loss
+    - Handle empty transcript with toast
+    - _Requirements: 2.4, 2.5, 2.6, 4.1_
+  - [x] 9.4 Implement error handling
+    - Show toast on API failure
+    - Do not deduct patience on error
+    - Re-enable button for retry
+    - _Requirements: 7.1, 7.2, 7.4_
+  - [x] 9.5 Write property test for error preserves patience
+    - **Property 8: Error Preserves Patience**
+    - Test that patience remains unchanged after any error
+    - **Validates: Requirements 7.2**
+
+- [x] 10. Implement end game screens
+  - [x] 10.1 Create GameOverScreen component
+    - Display "Call Failed" message
+    - Show "Try Again" button linking to Lobby
+    - _Requirements: 5.1, 5.4_
+  - [x] 10.2 Create WinScreen component
+    - Display "Sale Closed" message with confetti animation
+    - Show "Play Again" button linking to Lobby
+    - _Requirements: 5.2, 5.3, 5.5_
+  - [x] 10.3 Implement win/loss condition checks
+    - Check patience <= 0 → GameOver
+    - Check patience >= 100 → Win
+    - Check deal_closed === true → Win with confetti
+    - _Requirements: 5.1, 5.2, 5.3_
+
+- [x] 11. Final Checkpoint - All tests passing
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 12. Mobile-first responsive polish
+  - [x] 12.1 Implement responsive layouts
+    - Ensure all screens work on mobile viewports (320px - 428px)
+    - Test touch targets are minimum 44x44px
+    - Verify no horizontal scrolling on any screen
+    - _Requirements: 8.1_
+  - [x] 12.2 Add loading states and micro-interactions
+    - Add loading spinner while waiting for backend response
+    - Add subtle button press feedback
+    - Ensure smooth Framer Motion transitions throughout
+    - _Requirements: 8.4_
+  - [x] 12.3 Implement accessibility basics
+    - Add proper ARIA labels to ActionButton states
+    - Ensure color contrast meets WCAG AA standards
+    - Add focus indicators for keyboard navigation
+
+- [x] 13. Final polish and launch preparation
+  - [x] 13.1 Create production environment configuration
+    - Set up /frontend/.env.production with Vercel API URL
+    - Set up /backend/.env.production with production API keys
+    - Configure CORS for production domain
+  - [x] 13.2 Add error boundary and fallback UI
+    - Wrap app in React Error Boundary
+    - Create fallback UI for unexpected crashes
+    - Add Sentry or similar error tracking (optional)
+  - [x] 13.3 Optimize bundle and performance
+    - Analyze Next.js bundle size
+    - Lazy load WinScreen confetti animation
+    - Ensure audio playback doesn't block UI thread
+  - [x] 13.4 Create deployment configuration
+    - Add vercel.json for frontend deployment settings
+    - Create Dockerfile or deployment script for Vultr backend
+    - Document deployment steps in README.md
+  - [x] 13.5 Write README documentation
+    - Document local development setup
+    - List all environment variables with descriptions
+    - Include architecture overview and tech stack
+
+- [ ] 14. Pre-launch verification
+  - [ ] 14.1 End-to-end smoke test
+    - Verify full flow: Lobby → Simulation → Win/Loss → Replay
+    - Test on Chrome, Safari, Edge (mobile and desktop)
+    - Verify ElevenLabs audio plays correctly on all browsers
+  - [ ] 14.2 API key and security review
+    - Confirm no API keys exposed in frontend bundle
+    - Verify CORS only allows production domain
+    - Test rate limiting on backend (if implemented)

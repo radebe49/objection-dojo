@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "Run Test on Save",
+  "description": "Run the specific test file I just saved and show results.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/*_test.py",
+      "**/test_*.py"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "The test file {{filePath}} was just saved. Run this specific test file and show me the results. For TypeScript tests (.test.ts, .test.tsx), use the appropriate test runner from the frontend directory. For Python tests (*_test.py, test_*.py), use pytest from the backend directory. Display the test output clearly and summarize pass/fail status."
+  }
+}

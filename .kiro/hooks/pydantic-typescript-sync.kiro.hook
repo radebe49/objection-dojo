@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "name": "Pydantic-TypeScript Contract Sync",
+  "description": "When Pydantic models in the backend change, checks if TypeScript interfaces in the frontend need updating to match ChatRequest/ChatResponse API contracts.",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "backend/main.py"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A Pydantic model in the backend may have changed. Please review the Pydantic models (especially ChatRequest and ChatResponse) in backend/main.py and compare them with any corresponding TypeScript interfaces in the frontend (check frontend/src/ for type definitions). If the TypeScript interfaces are out of sync with the Pydantic models, suggest the necessary updates to keep the API contracts aligned."
+  }
+}
