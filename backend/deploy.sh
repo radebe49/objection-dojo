@@ -6,7 +6,7 @@ set -e
 
 APP_NAME="objection-dojo-api"
 APP_DIR="/opt/objection-dojo"
-REPO_URL="https://github.com/YOUR_USERNAME/objection-dojo.git"
+REPO_URL="https://github.com/radebe49/objection-dojo.git"
 
 echo "🚀 Deploying $APP_NAME..."
 

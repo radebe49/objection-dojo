@@ -33,7 +33,7 @@ curl -fsSL https://get.docker.com | sh
 
 ```bash
 # Download deploy script
-curl -O https://raw.githubusercontent.com/YOUR_USERNAME/objection-dojo/main/backend/deploy.sh
+curl -O https://raw.githubusercontent.com/radebe49/objection-dojo/main/backend/deploy.sh
 chmod +x deploy.sh
 
 # Run first-time setup
