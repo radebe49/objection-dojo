@@ -21,7 +21,7 @@ interface ActionButtonProps {
 /**
  * ActionButton component with state machine for Click-to-Talk functionality.
  * 
- * **Feature: objection-dojo, Requirements 2.1, 2.2, 2.3, 6.1**
+ * **Feature: dealfu, Requirements 2.1, 2.2, 2.3, 6.1**
  * - Idle state: Mic icon, blue background
  * - Recording state: Stop icon, pulsing animation
  * - Disabled state: greyed out, non-interactive

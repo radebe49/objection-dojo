@@ -39,9 +39,9 @@ interface ChatResponse {
 type GameStatus = "playing" | "won" | "lost";
 
 /**
- * SimulationScreen component - Main game screen for Objection Dojo.
+ * SimulationScreen component - Main game screen for Dealfu.
  *
- * **Feature: objection-dojo, Requirements 1.3, 1.4, 9.1**
+ * **Feature: dealfu, Requirements 1.3, 1.4, 9.1**
  * - Generates session_id on mount using crypto.randomUUID()
  * - Initializes patience at 50%
  * - Requests microphone permission
@@ -252,7 +252,7 @@ export default function SimulationScreen() {
               <ArrowLeft size={20} />
             </button>
             <h1 className="text-lg sm:text-xl font-bold text-primary text-center">
-              Objection Dojo
+              Dealfu
             </h1>
           </div>
           <PatienceMeter value={patienceScore} />

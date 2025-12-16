@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import * as fc from "fast-check";
 
 /**
- * **Feature: objection-dojo, Property 9: Session ID Uniqueness**
+ * **Feature: dealfu, Property 9: Session ID Uniqueness**
  *
  * *For any* two calls to crypto.randomUUID(), the generated session IDs SHALL be different.
  *
@@ -54,7 +54,7 @@ describe("Property 9: Session ID Uniqueness", () => {
 
 
 /**
- * **Feature: objection-dojo, Property 8: Error Preserves Patience**
+ * **Feature: dealfu, Property 8: Error Preserves Patience**
  *
  * *For any* API error response, the patience score SHALL remain equal to
  * the score before the request was made.

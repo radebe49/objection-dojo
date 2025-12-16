@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Objection Dojo is an AI-powered sales simulation web application that helps users practice their sales pitch against a skeptical AI persona. The app features a "Corporate Clean" aesthetic (professional blues, crisp whites, clean sans-serif fonts) and provides real-time feedback through a dynamic Patience Meter. Users speak their pitch via browser microphone, and the AI responds with objections or agreement, ultimately determining if the user "closes the deal" or gets "hung up on."
+Dealfu is an AI-powered sales simulation web application that helps users practice their sales pitch against a skeptical AI persona. The app features a "Corporate Clean" aesthetic (professional blues, crisp whites, clean sans-serif fonts) and provides real-time feedback through a dynamic Patience Meter. Users speak their pitch via browser microphone, and the AI responds with objections or agreement, ultimately determining if the user "closes the deal" or gets "hung up on."
 
 ## Glossary
 
@@ -22,7 +22,7 @@ Objection Dojo is an AI-powered sales simulation web application that helps user
 
 #### Acceptance Criteria
 
-1. WHEN a user navigates to the application THEN the Lobby_Screen SHALL display a centered "Start Simulation" button with the application title "Objection Dojo"
+1. WHEN a user navigates to the application THEN the Lobby_Screen SHALL display a centered "Start Simulation" button with the application title "Dealfu"
 2. WHEN a user clicks the "Start Simulation" button THEN the Lobby_Screen SHALL transition to the Simulation_Screen within 500 milliseconds
 3. WHEN the Simulation_Screen loads THEN the System SHALL initialize the Patience_Meter at 50%
 4. WHEN the Simulation_Screen loads THEN the System SHALL request microphone permission from the browser

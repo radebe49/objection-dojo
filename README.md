@@ -1,10 +1,10 @@
-# Objection Dojo
+# Dealfu
 
 AI-powered sales simulation training application that helps users practice handling customer objections through realistic voice-enabled conversations.
 
 ## Overview
 
-Objection Dojo is a real-time sales simulation where users practice their pitch against "The Skeptic CTO" - an AI persona that evaluates pitches and responds with realistic objections. The app features:
+Dealfu is a real-time sales simulation where users practice their pitch against "The Skeptic CTO" - an AI persona that evaluates pitches and responds with realistic objections. The app features:
 
 - **Voice-enabled interactions** using Web Speech API for speech-to-text
 - **AI-generated responses** via Cerebras API
@@ -136,14 +136,14 @@ Backend runs at http://localhost:8000
 cd backend
 
 # Build Docker image
-docker build -t objection-dojo-api .
+docker build -t dealfu-api .
 
 # Run container
 docker run -d \
-  --name objection-dojo-api \
+  --name dealfu-api \
   -p 8000:8000 \
   --env-file .env.production \
-  objection-dojo-api
+  dealfu-api
 ```
 
 Or use docker-compose:

@@ -49,7 +49,7 @@ interface UseSpeechRecognitionReturn {
 /**
  * Custom hook wrapping the Web Speech API for speech-to-text functionality.
  *
- * **Feature: objection-dojo, Requirements 2.7, 2.8**
+ * **Feature: dealfu, Requirements 2.7, 2.8**
  * - Exposes start(), stop(), transcript, isListening
  * - Handles browser compatibility check
  * - Auto-restarts recognition when it ends unexpectedly (silence detection)

@@ -1,8 +1,8 @@
-# Objection Dojo - Performance Optimization Analysis
+# Dealfu - Performance Optimization Analysis
 
 ## Executive Summary
 
-This document analyzes the current implementation of Objection Dojo to identify bottlenecks preventing the "natural, fast, almost human conversation" experience that Cerebras is known for. The goal is to minimize latency in the voice conversation loop for mobile demo scenarios.
+This document analyzes the current implementation of Dealfu to identify bottlenecks preventing the "natural, fast, almost human conversation" experience that Cerebras is known for. The goal is to minimize latency in the voice conversation loop for mobile demo scenarios.
 
 ---
 

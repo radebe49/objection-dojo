@@ -1,5 +1,5 @@
 """
-Audio utility functions for Objection Dojo.
+Audio utility functions for Dealfu.
 
 Provides base64 encoding/decoding for audio data.
 

@@ -5,7 +5,7 @@ import ActionButton from "./ActionButton";
 
 describe("ActionButton", () => {
   /**
-   * **Feature: objection-dojo, Property 6: Audio Mutex - Button Disabled During Playback**
+   * **Feature: dealfu, Property 6: Audio Mutex - Button Disabled During Playback**
    * 
    * *For any* state where audio is currently playing, the Action Button SHALL be in disabled state.
    * 
@@ -64,7 +64,7 @@ describe("ActionButton", () => {
   });
 
   /**
-   * **Feature: objection-dojo, Property 7: Disabled Button Ignores Input**
+   * **Feature: dealfu, Property 7: Disabled Button Ignores Input**
    * 
    * *For any* sequence of tap events while the Action Button is disabled,
    * the button state SHALL remain unchanged.

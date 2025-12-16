@@ -1,5 +1,5 @@
 """
-LiquidMetal Raindrop SmartMemory client for Objection Dojo.
+LiquidMetal Raindrop SmartMemory client for Dealfu.
 
 Handles session-based conversation context storage.
 

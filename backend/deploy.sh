@@ -1,12 +1,12 @@
 #!/bin/bash
-# Objection Dojo Backend - Vultr Deployment Script
+# Dealfu Backend - Vultr Deployment Script
 # Run this on your Vultr Cloud Compute instance
 
 set -e
 
-APP_NAME="objection-dojo-api"
-APP_DIR="/opt/objection-dojo"
-REPO_URL="https://github.com/radebe49/objection-dojo.git"
+APP_NAME="dealfu-api"
+APP_DIR="/opt/dealfu"
+REPO_URL="https://github.com/radebe49/dealfu.git"
 
 echo "🚀 Deploying $APP_NAME..."
 

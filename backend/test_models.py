@@ -1,5 +1,5 @@
 """
-Property-based tests for Objection Dojo models.
+Property-based tests for Dealfu models.
 
 Uses Hypothesis for property-based testing to verify model validation
 across a wide range of inputs.
@@ -12,7 +12,7 @@ from pydantic import ValidationError
 from models import CerebrasResponse, Sentiment
 
 
-# **Feature: objection-dojo, Property 10: Cerebras Response Validation**
+# **Feature: dealfu, Property 10: Cerebras Response Validation**
 # **Validates: Requirements 10.2, 10.4, 10.5**
 #
 # *For any* JSON object, validation SHALL pass if and only if it contains:
@@ -36,7 +36,7 @@ valid_cerebras_data = st.fixed_dictionaries({
 @given(data=valid_cerebras_data)
 def test_valid_cerebras_response_passes_validation(data):
     """
-    **Feature: objection-dojo, Property 10: Cerebras Response Validation**
+    **Feature: dealfu, Property 10: Cerebras Response Validation**
     
     Property: For any valid JSON with correct fields and types,
     validation SHALL pass.
@@ -60,7 +60,7 @@ def test_valid_cerebras_response_passes_validation(data):
 )
 def test_invalid_sentiment_fails_validation(text, deal_closed, invalid_sentiment):
     """
-    **Feature: objection-dojo, Property 10: Cerebras Response Validation**
+    **Feature: dealfu, Property 10: Cerebras Response Validation**
     
     Property: For any JSON with invalid sentiment value,
     validation SHALL fail.
@@ -84,7 +84,7 @@ def test_invalid_sentiment_fails_validation(text, deal_closed, invalid_sentiment
 )
 def test_missing_text_field_fails_validation(sentiment, deal_closed):
     """
-    **Feature: objection-dojo, Property 10: Cerebras Response Validation**
+    **Feature: dealfu, Property 10: Cerebras Response Validation**
     
     Property: For any JSON missing the "text" field,
     validation SHALL fail.
@@ -107,7 +107,7 @@ def test_missing_text_field_fails_validation(sentiment, deal_closed):
 )
 def test_missing_sentiment_field_fails_validation(text, deal_closed):
     """
-    **Feature: objection-dojo, Property 10: Cerebras Response Validation**
+    **Feature: dealfu, Property 10: Cerebras Response Validation**
     
     Property: For any JSON missing the "sentiment" field,
     validation SHALL fail.
@@ -130,7 +130,7 @@ def test_missing_sentiment_field_fails_validation(text, deal_closed):
 )
 def test_missing_deal_closed_field_fails_validation(text, sentiment):
     """
-    **Feature: objection-dojo, Property 10: Cerebras Response Validation**
+    **Feature: dealfu, Property 10: Cerebras Response Validation**
     
     Property: For any JSON missing the "deal_closed" field,
     validation SHALL fail.
@@ -150,7 +150,7 @@ def test_missing_deal_closed_field_fails_validation(text, sentiment):
 @given(data=valid_cerebras_data)
 def test_deal_closed_is_always_boolean(data):
     """
-    **Feature: objection-dojo, Property 10: Cerebras Response Validation**
+    **Feature: dealfu, Property 10: Cerebras Response Validation**
     
     Property: For any valid CerebrasResponse, the deal_closed field
     SHALL be a boolean value.
@@ -161,7 +161,7 @@ def test_deal_closed_is_always_boolean(data):
     assert isinstance(response.deal_closed, bool)
 
 
-# **Feature: objection-dojo, Property 5: Patience Score Calculation**
+# **Feature: dealfu, Property 5: Patience Score Calculation**
 # **Validates: Requirements 4.5**
 #
 # *For any* starting patience score (0-100) and sentiment value, the new score SHALL equal:
@@ -184,7 +184,7 @@ valid_patience_scores = st.integers(min_value=0, max_value=100)
 )
 def test_patience_calculation_applies_correct_formula(current_patience, sentiment):
     """
-    **Feature: objection-dojo, Property 5: Patience Score Calculation**
+    **Feature: dealfu, Property 5: Patience Score Calculation**
     
     Property: For any starting score and sentiment, the formula is correctly applied:
     - positive: +15 points
@@ -216,7 +216,7 @@ def test_patience_calculation_applies_correct_formula(current_patience, sentimen
 )
 def test_patience_score_always_in_valid_range(current_patience, sentiment):
     """
-    **Feature: objection-dojo, Property 5: Patience Score Calculation**
+    **Feature: dealfu, Property 5: Patience Score Calculation**
     
     Property: For any input, the result SHALL always be in the range [0, 100].
     
@@ -231,7 +231,7 @@ def test_patience_score_always_in_valid_range(current_patience, sentiment):
 @given(current_patience=valid_patience_scores)
 def test_positive_sentiment_increases_patience(current_patience):
     """
-    **Feature: objection-dojo, Property 5: Patience Score Calculation**
+    **Feature: dealfu, Property 5: Patience Score Calculation**
     
     Property: Positive sentiment SHALL increase patience by 15 (before clamping).
     
@@ -248,7 +248,7 @@ def test_positive_sentiment_increases_patience(current_patience):
 @given(current_patience=valid_patience_scores)
 def test_negative_sentiment_decreases_patience(current_patience):
     """
-    **Feature: objection-dojo, Property 5: Patience Score Calculation**
+    **Feature: dealfu, Property 5: Patience Score Calculation**
     
     Property: Negative sentiment SHALL decrease patience by 20 (before clamping).
     
@@ -265,7 +265,7 @@ def test_negative_sentiment_decreases_patience(current_patience):
 @given(current_patience=valid_patience_scores)
 def test_neutral_sentiment_preserves_patience(current_patience):
     """
-    **Feature: objection-dojo, Property 5: Patience Score Calculation**
+    **Feature: dealfu, Property 5: Patience Score Calculation**
     
     Property: Neutral sentiment SHALL not change the patience score.
     
@@ -276,7 +276,7 @@ def test_neutral_sentiment_preserves_patience(current_patience):
     assert result == current_patience
 
 
-# **Feature: objection-dojo, Property 3: Base64 Audio Round-Trip**
+# **Feature: dealfu, Property 3: Base64 Audio Round-Trip**
 # **Validates: Requirements 3.4**
 #
 # *For any* valid MP3 binary data, encoding to base64 and then decoding
@@ -289,7 +289,7 @@ from audio_utils import encode_audio_base64, decode_audio_base64
 @given(audio_data=st.binary(min_size=1, max_size=10000))
 def test_base64_audio_round_trip(audio_data):
     """
-    **Feature: objection-dojo, Property 3: Base64 Audio Round-Trip**
+    **Feature: dealfu, Property 3: Base64 Audio Round-Trip**
     
     Property: For any binary data, encoding to base64 and then decoding
     SHALL produce the original binary data.
@@ -313,7 +313,7 @@ def test_base64_audio_round_trip(audio_data):
 @given(audio_data=st.binary(min_size=1, max_size=10000))
 def test_base64_encoding_produces_valid_string(audio_data):
     """
-    **Feature: objection-dojo, Property 3: Base64 Audio Round-Trip**
+    **Feature: dealfu, Property 3: Base64 Audio Round-Trip**
     
     Property: For any binary data, base64 encoding SHALL produce
     a valid ASCII string containing only base64 characters.
@@ -329,7 +329,7 @@ def test_base64_encoding_produces_valid_string(audio_data):
     assert all(c in valid_chars for c in encoded)
 
 
-# **Feature: objection-dojo, Property 4: Response Structure Completeness**
+# **Feature: dealfu, Property 4: Response Structure Completeness**
 # **Validates: Requirements 3.5**
 #
 # *For any* successful backend response, the JSON SHALL contain all required fields:
@@ -354,7 +354,7 @@ valid_chat_response_data = st.fixed_dictionaries({
 @given(data=valid_chat_response_data)
 def test_chat_response_contains_all_required_fields(data):
     """
-    **Feature: objection-dojo, Property 4: Response Structure Completeness**
+    **Feature: dealfu, Property 4: Response Structure Completeness**
     
     Property: For any valid ChatResponse, all required fields SHALL be present
     with correct types: ai_text (string), patience_score (number 0-100),
@@ -387,7 +387,7 @@ def test_chat_response_contains_all_required_fields(data):
 @given(data=valid_chat_response_data)
 def test_chat_response_patience_score_in_valid_range(data):
     """
-    **Feature: objection-dojo, Property 4: Response Structure Completeness**
+    **Feature: dealfu, Property 4: Response Structure Completeness**
     
     Property: For any ChatResponse, patience_score SHALL be in range [0, 100].
     
@@ -406,7 +406,7 @@ def test_chat_response_patience_score_in_valid_range(data):
 )
 def test_chat_response_missing_patience_score_fails(ai_text, deal_closed, audio_base64):
     """
-    **Feature: objection-dojo, Property 4: Response Structure Completeness**
+    **Feature: dealfu, Property 4: Response Structure Completeness**
     
     Property: For any JSON missing patience_score, validation SHALL fail.
     
@@ -430,7 +430,7 @@ def test_chat_response_missing_patience_score_fails(ai_text, deal_closed, audio_
 )
 def test_chat_response_missing_ai_text_fails(patience_score, deal_closed, audio_base64):
     """
-    **Feature: objection-dojo, Property 4: Response Structure Completeness**
+    **Feature: dealfu, Property 4: Response Structure Completeness**
     
     Property: For any JSON missing ai_text, validation SHALL fail.
     
@@ -454,7 +454,7 @@ def test_chat_response_missing_ai_text_fails(patience_score, deal_closed, audio_
 )
 def test_chat_response_missing_deal_closed_fails(ai_text, patience_score, audio_base64):
     """
-    **Feature: objection-dojo, Property 4: Response Structure Completeness**
+    **Feature: dealfu, Property 4: Response Structure Completeness**
     
     Property: For any JSON missing deal_closed, validation SHALL fail.
     
@@ -478,7 +478,7 @@ def test_chat_response_missing_deal_closed_fails(ai_text, patience_score, audio_
 )
 def test_chat_response_missing_audio_base64_fails(ai_text, patience_score, deal_closed):
     """
-    **Feature: objection-dojo, Property 4: Response Structure Completeness**
+    **Feature: dealfu, Property 4: Response Structure Completeness**
     
     Property: For any JSON missing audio_base64, validation SHALL fail.
     
@@ -503,7 +503,7 @@ def test_chat_response_missing_audio_base64_fails(ai_text, patience_score, deal_
 )
 def test_chat_response_invalid_patience_score_fails(ai_text, deal_closed, audio_base64, invalid_patience):
     """
-    **Feature: objection-dojo, Property 4: Response Structure Completeness**
+    **Feature: dealfu, Property 4: Response Structure Completeness**
     
     Property: For any JSON with patience_score outside [0, 100], validation SHALL fail.
     

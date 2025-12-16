@@ -76,7 +76,7 @@
 
 - [x] 6. Implement frontend core components
   - [x] 6.1 Create LobbyScreen component
-    - Display centered "Objection Dojo" title
+    - Display centered "Dealfu" title
     - Display "Start Simulation" button
     - Navigate to /simulation on click
     - _Requirements: 1.1, 1.2_

@@ -15,7 +15,7 @@ interface UseAudioPlayerReturn {
 /**
  * Custom hook for playing base64-encoded audio.
  * 
- * **Feature: objection-dojo, Requirements 3.6, 6.2**
+ * **Feature: dealfu, Requirements 3.6, 6.2**
  * - Accepts base64 audio string
  * - Uses AudioContext for lower latency playback
  * - Exposes play(), isPlaying, onEnded callback

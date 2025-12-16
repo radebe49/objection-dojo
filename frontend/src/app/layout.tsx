@@ -16,8 +16,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Objection Dojo",
-  description: "AI-powered sales simulation training",
+  title: "Dealfu",
+  description: "Master the art of the deal - AI-powered sales simulation training",
 };
 
 export default function RootLayout({

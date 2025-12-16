@@ -20,7 +20,7 @@ interface ConfettiPiece {
 /**
  * WinScreen component - Displays when the user wins the simulation.
  *
- * **Feature: objection-dojo, Requirements 5.2, 5.3, 5.5**
+ * **Feature: dealfu, Requirements 5.2, 5.3, 5.5**
  * - Displays "Sale Closed" message when patience reaches 100% or deal_closed is true
  * - Shows confetti animation for celebration
  * - Shows "Play Again" button linking to Lobby

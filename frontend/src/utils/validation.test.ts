@@ -4,7 +4,7 @@ import { isValidTranscript, shouldTriggerApiCall } from "./validation";
 
 describe("Transcript Validation", () => {
   /**
-   * **Feature: objection-dojo, Property 1: Whitespace Input Rejection**
+   * **Feature: dealfu, Property 1: Whitespace Input Rejection**
    * 
    * *For any* string that is empty, null, or contains only whitespace characters,
    * the system SHALL reject it without sending to the backend API.
@@ -45,7 +45,7 @@ describe("Transcript Validation", () => {
   });
 
   /**
-   * **Feature: objection-dojo, Property 2: Valid Text Triggers API Call**
+   * **Feature: dealfu, Property 2: Valid Text Triggers API Call**
    * 
    * *For any* string that contains at least one non-whitespace character,
    * the system SHALL send it to the Backend API.

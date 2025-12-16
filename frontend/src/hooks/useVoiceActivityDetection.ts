@@ -109,9 +109,17 @@ export function useVoiceActivityDetection(
   const hasSpokenRef = useRef<boolean>(false);
   const enabledRef = useRef<boolean>(enabled);
 
-  // Keep enabled ref in sync
+  // Keep enabled ref in sync and clear transcript when disabled
   useEffect(() => {
     enabledRef.current = enabled;
+    
+    // When VAD is disabled (AI speaking), clear any partial transcript
+    // This prevents the AI's voice from being transcribed and sent as user input
+    if (!enabled) {
+      finalTranscriptRef.current = "";
+      interimTranscriptRef.current = "";
+      setTranscript("");
+    }
   }, [enabled]);
 
   // Initialize speech recognition
@@ -193,7 +201,20 @@ export function useVoiceActivityDetection(
 
   // Audio level analysis for VAD
   const checkAudioLevel = useCallback(() => {
-    if (!analyserRef.current || !enabledRef.current) return;
+    if (!analyserRef.current) return;
+    
+    // When disabled (AI speaking), reset VAD state and skip processing
+    // This prevents the AI's voice from being detected as user speech
+    if (!enabledRef.current) {
+      if (isSpeakingRef.current) {
+        isSpeakingRef.current = false;
+        setIsSpeaking(false);
+      }
+      // Reset speech detection state so we start fresh when re-enabled
+      hasSpokenRef.current = false;
+      lastSpeechTimeRef.current = 0;
+      return;
+    }
 
     const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
     analyserRef.current.getByteFrequencyData(dataArray);

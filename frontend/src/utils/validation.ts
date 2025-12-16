@@ -1,7 +1,7 @@
 /**
  * Validates transcript input before sending to the API.
  * 
- * **Feature: objection-dojo, Requirements 2.4, 2.6**
+ * **Feature: dealfu, Requirements 2.4, 2.6**
  * - Rejects empty, null, or whitespace-only strings
  * - Accepts strings with at least one non-whitespace character
  */

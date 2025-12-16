@@ -1,5 +1,5 @@
 """
-Cerebras API client for Objection Dojo.
+Cerebras API client for Dealfu.
 
 Handles communication with Cerebras AI API for generating
 "The Skeptic CTO" persona responses.

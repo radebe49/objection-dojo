@@ -10,7 +10,7 @@ interface GameOverScreenProps {
 /**
  * GameOverScreen component - Displays when the user loses the simulation.
  *
- * **Feature: objection-dojo, Requirements 5.1, 5.4**
+ * **Feature: dealfu, Requirements 5.1, 5.4**
  * - Displays "Call Failed" message when patience reaches 0%
  * - Shows "Try Again" button linking to Lobby
  */

@@ -18,7 +18,7 @@ export default function LobbyScreen() {
         transition={{ duration: 0.3 }}
         className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-4 sm:mb-6 text-center px-2"
       >
-        Objection Dojo
+        Dealfu
       </motion.h1>
 
       <motion.p

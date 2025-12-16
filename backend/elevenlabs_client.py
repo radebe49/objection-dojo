@@ -1,5 +1,5 @@
 """
-ElevenLabs API client for Objection Dojo.
+ElevenLabs API client for Dealfu.
 
 Handles text-to-speech conversion using ElevenLabs API.
 

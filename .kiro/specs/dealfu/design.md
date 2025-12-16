@@ -1,8 +1,8 @@
-# Design Document: Objection Dojo
+# Design Document: Dealfu
 
 ## Overview
 
-Objection Dojo is a real-time AI sales simulation application built as a monorepo with a Next.js 14 frontend and Python FastAPI backend. The system uses a server-side orchestration pattern where the backend handles all AI (Cerebras) and voice (ElevenLabs) processing, returning a single consolidated response to minimize latency and hide API keys.
+Dealfu is a real-time AI sales simulation application built as a monorepo with a Next.js 14 frontend and Python FastAPI backend. The system uses a server-side orchestration pattern where the backend handles all AI (Cerebras) and voice (ElevenLabs) processing, returning a single consolidated response to minimize latency and hide API keys.
 
 The core interaction loop is:
 1. User clicks Action Button to start recording
@@ -240,7 +240,7 @@ Unit tests will cover:
 
 Property-based tests will verify universal properties that should hold across all inputs. Each property test will:
 - Run a minimum of 100 iterations
-- Be tagged with the correctness property it implements using format: `**Feature: objection-dojo, Property {number}: {property_text}**`
+- Be tagged with the correctness property it implements using format: `**Feature: dealfu, Property {number}: {property_text}**`
 - Reference the requirements clause it validates
 
 

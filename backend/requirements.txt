@@ -4,6 +4,10 @@ httpx>=0.26.0
 pydantic>=2.5.0
 python-dotenv>=1.0.0
 
+# Vultr PostgreSQL (REQUIRED for hackathon)
+asyncpg>=0.29.0
+sqlalchemy[asyncio]>=2.0.0
+
 # Testing
 pytest>=8.0.0
 pytest-asyncio>=0.23.0

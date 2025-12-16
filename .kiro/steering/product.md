@@ -1,6 +1,6 @@
-# Objection Dojo
+# Dealfu
 
-Sales simulation training application that helps users practice handling customer objections.
+Sales simulation training application that helps users master the art of the deal through AI-powered objection handling practice.
 
 ## Purpose
 - Interactive sales training platform

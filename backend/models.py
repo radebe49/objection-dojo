@@ -1,5 +1,5 @@
 """
-Pydantic models for Objection Dojo API contracts.
+Pydantic models for Dealfu API contracts.
 
 These models define the data structures for:
 - ChatRequest: Incoming chat requests from frontend
@@ -8,6 +8,7 @@ These models define the data structures for:
 """
 
 from enum import Enum
+from typing import Optional
 from pydantic import BaseModel, Field, field_validator
 
 
@@ -56,6 +57,58 @@ class ChatResponse(BaseModel):
     )
     deal_closed: bool = Field(..., description="Win condition flag")
     audio_base64: str = Field(..., description="MP3 audio encoded as base64")
+
+
+class SessionCreate(BaseModel):
+    """
+    Request payload for creating a new session.
+    
+    Attributes:
+        session_id: UUID identifying the session
+        user_id: Optional user ID for authenticated users
+        patience_start: Starting patience value (default 50)
+    """
+    session_id: str = Field(..., description="UUID for the session")
+    user_id: str | None = Field(None, description="Optional user ID")
+    patience_start: int = Field(50, ge=0, le=100, description="Starting patience value")
+
+
+class SessionEnd(BaseModel):
+    """
+    Request payload for ending a session.
+    
+    Attributes:
+        session_id: UUID of the session to end
+        patience_end: Final patience value
+        deal_closed: Whether the deal was closed
+        turns: Total turns taken
+    """
+    session_id: str = Field(..., description="Session ID to end")
+    patience_end: int = Field(..., ge=0, le=100, description="Final patience value")
+    deal_closed: bool = Field(..., description="Whether deal was closed")
+    turns: int = Field(..., ge=0, description="Total turns taken")
+
+
+class LeaderboardEntry(BaseModel):
+    """
+    Leaderboard entry data.
+    
+    Attributes:
+        user_id: User identifier
+        username: Display name
+        wins: Total wins
+        losses: Total losses
+        total_sessions: Total sessions played
+        best_turns_to_win: Best (lowest) turns to win
+        avg_patience_end: Average final patience score
+    """
+    user_id: str = Field(..., description="User identifier")
+    username: str | None = Field(None, description="Display name")
+    wins: int = Field(0, ge=0, description="Total wins")
+    losses: int = Field(0, ge=0, description="Total losses")
+    total_sessions: int = Field(0, ge=0, description="Total sessions played")
+    best_turns_to_win: int | None = Field(None, description="Best turns to win")
+    avg_patience_end: int = Field(50, ge=0, le=100, description="Average final patience")
 
 
 class CerebrasResponse(BaseModel):
@@ -109,3 +162,33 @@ def calculate_patience(current: int, sentiment: str) -> int:
     }
     new_score = current + delta.get(sentiment.lower(), 0)
     return max(0, min(100, new_score))
+
+
+# ==================== Session & Leaderboard Models (Vultr Integration) ====================
+
+class SessionCreate(BaseModel):
+    """Request to create a new game session."""
+    session_id: str = Field(..., description="UUID for the session")
+    user_id: Optional[str] = Field(None, description="Optional user ID for authenticated users")
+    patience_start: int = Field(50, ge=0, le=100, description="Starting patience value")
+
+
+class SessionEnd(BaseModel):
+    """Request to end a game session."""
+    session_id: str = Field(..., description="Session ID to end")
+    user_id: Optional[str] = Field(None, description="User ID for leaderboard update")
+    username: Optional[str] = Field(None, description="Display name for leaderboard")
+    patience_end: int = Field(..., ge=0, le=100, description="Final patience value")
+    deal_closed: bool = Field(..., description="Whether deal was closed")
+    turns: int = Field(..., ge=0, description="Total turns taken")
+
+
+class LeaderboardEntry(BaseModel):
+    """Leaderboard entry for a player."""
+    user_id: str = Field(..., description="User ID")
+    username: Optional[str] = Field(None, description="Display name")
+    wins: int = Field(0, description="Total wins")
+    losses: int = Field(0, description="Total losses")
+    total_sessions: int = Field(0, description="Total sessions played")
+    best_turns_to_win: Optional[int] = Field(None, description="Best (lowest) turns to win")
+    avg_patience_end: int = Field(50, description="Average final patience")

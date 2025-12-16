@@ -1,129 +1,178 @@
-# Vultr Deployment Guide
+# Vultr Backend Deployment Guide
 
-## Prerequisites
-- Vultr account (https://vultr.com)
-- Domain name (optional but recommended)
+Deploy your Dealfu backend to Vultr Cloud Compute for the hackathon.
 
-## Step 1: Create Vultr Instance
+## Quick Deploy (5 minutes)
 
-1. Log into Vultr Dashboard
-2. Click "Deploy New Server"
-3. Choose:
-   - **Type**: Cloud Compute (Shared CPU)
-   - **Location**: Choose closest to your users
-   - **Image**: Marketplace → Docker (or Ubuntu 22.04)
-   - **Plan**: $6/mo (1 vCPU, 1GB RAM) - sufficient for MVP
-4. Add your SSH key for secure access
-5. Click "Deploy Now"
+### Step 1: Create Vultr Cloud Compute Instance
 
-## Step 2: Initial Server Setup
+1. Go to https://my.vultr.com/deploy/
+2. Choose:
+   - **Type**: Cloud Compute - Shared CPU
+   - **Location**: Same region as your database (for lowest latency)
+   - **Image**: Marketplace → **Docker**
+   - **Plan**: $6/mo (1 vCPU, 1GB RAM) - sufficient for demo
+3. Add your SSH key
+4. Click "Deploy Now"
+5. Wait ~2 minutes for server to be ready
+6. Copy the IP address
 
-SSH into your server:
+### Step 2: SSH and Deploy
+
 ```bash
+# SSH into your server
 ssh root@YOUR_SERVER_IP
-```
 
-If you chose Ubuntu instead of Docker image:
-```bash
-# Install Docker
-curl -fsSL https://get.docker.com | sh
-```
+# Clone the repo
+git clone https://github.com/YOUR_USERNAME/dealfu.git /opt/dealfu
+cd /opt/dealfu/backend
 
-## Step 3: Deploy the Application
-
-```bash
-# Download deploy script
-curl -O https://raw.githubusercontent.com/radebe49/objection-dojo/main/backend/deploy.sh
-chmod +x deploy.sh
-
-# Run first-time setup
-./deploy.sh
-```
-
-Create your environment file:
-```bash
-nano /opt/objection-dojo/backend/.env
-```
-
-Add your API keys:
-```
+# Create environment file
+cat > .env << 'EOF'
+# API Keys
 CEREBRAS_API_KEY=your_cerebras_key
 ELEVENLABS_API_KEY=your_elevenlabs_key
 ELEVENLABS_VOICE_ID=your_voice_id
 RAINDROP_API_KEY=your_raindrop_key
-PRODUCTION_DOMAIN=https://objection-dojo.vercel.app
+
+# Vultr PostgreSQL (your managed database)
+VULTR_DATABASE_URL=postgresql+asyncpg://vultradmin:PASSWORD@HOST:PORT/defaultdb
+
+# Frontend URL for CORS
+PRODUCTION_DOMAIN=https://your-app.vercel.app
+EOF
+
+# Edit with your actual values
+nano .env
+
+# Build and run
+docker build -t dealfu-api .
+docker run -d \
+  --name dealfu-api \
+  -p 8000:8000 \
+  --env-file .env \
+  --restart unless-stopped \
+  dealfu-api
+
+# Verify it's running
+curl http://localhost:8000/health
 ```
 
-Run deployment:
-```bash
-./deploy.sh
-```
+### Step 3: Set Up HTTPS with Caddy (Recommended)
 
-## Step 4: Set Up Domain & SSL (Recommended)
-
-Install Caddy for automatic HTTPS:
 ```bash
-apt install -y debian-keyring debian-archive-keyring apt-transport-https
+# Install Caddy
+apt install -y debian-keyring debian-archive-keyring apt-transport-https curl
 curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
 curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
-apt update
-apt install caddy
-```
+apt update && apt install caddy
 
-Configure Caddy:
-```bash
-nano /etc/caddy/Caddyfile
-```
-
-Add:
-```
+# Configure reverse proxy (replace with your domain)
+cat > /etc/caddy/Caddyfile << 'EOF'
 api.yourdomain.com {
     reverse_proxy localhost:8000
 }
-```
+EOF
 
-Restart Caddy:
-```bash
+# Or use IP directly (no SSL, for testing)
+cat > /etc/caddy/Caddyfile << 'EOF'
+:80 {
+    reverse_proxy localhost:8000
+}
+EOF
+
+# Start Caddy
 systemctl restart caddy
 ```
 
-## Step 5: Update Frontend
+### Step 4: Configure Firewall
+
+```bash
+ufw allow 22    # SSH
+ufw allow 80    # HTTP
+ufw allow 443   # HTTPS
+ufw --force enable
+```
+
+### Step 5: Update Frontend
 
 Update `frontend/.env.production`:
-```
+```bash
 NEXT_PUBLIC_API_URL=https://api.yourdomain.com
+# Or for IP: http://YOUR_SERVER_IP:8000
 ```
 
-Redeploy frontend on Vercel.
+Redeploy on Vercel.
+
+---
 
 ## Maintenance Commands
 
 ```bash
 # View logs
-docker logs -f objection-dojo-api
+docker logs -f dealfu-api
 
 # Restart
-docker restart objection-dojo-api
+docker restart dealfu-api
 
-# Update to latest
-cd /opt/objection-dojo && ./backend/deploy.sh
+# Update to latest code
+cd /opt/dealfu
+git pull
+cd backend
+docker build -t dealfu-api .
+docker stop dealfu-api
+docker rm dealfu-api
+docker run -d --name dealfu-api -p 8000:8000 --env-file .env --restart unless-stopped dealfu-api
 
 # Check status
 docker ps
 curl http://localhost:8000/health
 ```
 
-## Firewall Setup
+---
+
+## Alternative: Use deploy.sh Script
 
 ```bash
-ufw allow 22    # SSH
-ufw allow 80    # HTTP
-ufw allow 443   # HTTPS
-ufw enable
+# On your server
+cd /opt/dealfu/backend
+chmod +x deploy.sh
+./deploy.sh
 ```
 
-## Estimated Costs
+---
 
-- Vultr Cloud Compute: $6-12/mo
-- Domain: ~$12/year
-- Total: ~$7-13/mo
+## Costs
+
+| Service | Cost |
+|---------|------|
+| Vultr Cloud Compute | $6/mo |
+| Vultr Managed PostgreSQL | $15/mo |
+| Domain (optional) | ~$12/year |
+| **Total** | ~$21-22/mo |
+
+*Use the $500 hackathon credits to cover this!*
+
+---
+
+## Troubleshooting
+
+**Container won't start:**
+```bash
+docker logs dealfu-api
+```
+
+**Database connection fails:**
+- Check VULTR_DATABASE_URL format
+- Ensure database allows connections from your server IP
+- In Vultr DB dashboard → Trusted Sources → Add your server IP
+
+**CORS errors:**
+- Verify PRODUCTION_DOMAIN in .env matches your frontend URL exactly
+- Include protocol (https://)
+
+**Health check fails:**
+```bash
+curl -v http://localhost:8000/health
+docker logs dealfu-api
+```
