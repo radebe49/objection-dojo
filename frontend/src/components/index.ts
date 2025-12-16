@@ -1,5 +1,6 @@
 export { default as ActionButton } from "./ActionButton";
 export type { ActionButtonState } from "./ActionButton";
+export { AuthButton } from "./AuthButton";
 export { default as GameOverScreen } from "./GameOverScreen";
 export { default as LobbyScreen } from "./LobbyScreen";
 export { default as PatienceMeter } from "./PatienceMeter";
