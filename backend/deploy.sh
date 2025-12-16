@@ -5,8 +5,8 @@
 set -e
 
 APP_NAME="dealfu-api"
-APP_DIR="/opt/dealfu"
-REPO_URL="https://github.com/radebe49/dealfu.git"
+APP_DIR="/opt/objection-dojo"
+REPO_URL="https://github.com/radebe49/projectsalesdojo.git"
 
 echo "🚀 Deploying $APP_NAME..."
 
