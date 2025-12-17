@@ -58,6 +58,20 @@ Dealfu is a real-time sales simulation where users practice their pitch against 
 - **ElevenLabs API** - Text-to-speech
 - **LiquidMetal Raindrop** - Session memory storage
 
+## Browser Compatibility
+
+> ⚠️ **Important: Brave Browser Users**
+> 
+> Dealfu uses the Web Speech API for voice recognition. **Brave browser blocks this by default** for privacy reasons.
+> 
+> To use Dealfu in Brave:
+> 1. Go to `brave://settings/privacy`
+> 2. Scroll to "Web Speech API" or search for "speech"
+> 3. Enable "Allow sites to use the Web Speech API"
+> 4. Alternatively, use **Chrome** or **Edge** for the best experience
+>
+> The app also requires **microphone permission** - make sure to allow it when prompted.
+
 ## Local Development Setup
 
 ### Prerequisites
