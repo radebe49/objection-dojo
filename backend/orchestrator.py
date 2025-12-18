@@ -93,7 +93,12 @@ class OrchestratorService:
     async def _get_history(self, session_id: str) -> list[dict]:
         """Get conversation history from Raindrop or local storage."""
         if self.use_raindrop and self.raindrop_client:
-            return await self.raindrop_client.get_conversation_history(session_id)
+            try:
+                return await self.raindrop_client.get_conversation_history(session_id)
+            except Exception as e:
+                # Gracefully fall back to empty history if Raindrop fails
+                print(f"⚠️  Raindrop get_history failed, continuing without history: {e}")
+                return []
         elif self.smartmemory_client:
             return await self.smartmemory_client.get_history(session_id)
         return []
@@ -106,11 +111,15 @@ class OrchestratorService:
     ) -> None:
         """Store user and AI messages in memory."""
         if self.use_raindrop and self.raindrop_client:
-            # Store in Raindrop SmartMemory (parallel)
-            await asyncio.gather(
-                self.raindrop_client.add_user_message(session_id, user_text),
-                self.raindrop_client.add_assistant_message(session_id, ai_text),
-            )
+            try:
+                # Store in Raindrop SmartMemory (parallel)
+                await asyncio.gather(
+                    self.raindrop_client.add_user_message(session_id, user_text),
+                    self.raindrop_client.add_assistant_message(session_id, ai_text),
+                )
+            except Exception as e:
+                # Non-critical - don't fail the request if storage fails
+                print(f"⚠️  Raindrop store_messages failed, continuing: {e}")
         elif self.smartmemory_client:
             # Store in local memory (parallel)
             await asyncio.gather(
